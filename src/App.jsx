@@ -112,9 +112,12 @@ function App() {
   const checkAnswer = (anwserNeedToCheck) => {
     const checkedAnwser = anwserNeedToCheck.map((e) => {
       let points = 0;
+
       if (e.catg === e.group) {
         points++;
         return { ...e, color: "#dbf9b7" };
+      } else if (e.catg === "Options") {
+        return { ...e };
       }
       return { ...e, color: "pink" };
     });

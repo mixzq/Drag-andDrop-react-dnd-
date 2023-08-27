@@ -25,10 +25,10 @@ body {
   --editor-color: rgb(67, 83, 52); */
 
   /* ------------------ */
-  --primary-color: rgb(155, 171, 184);
+  /* --primary-color: rgb(155, 171, 184);
   --secondary-color: rgba(215, 192, 174, 0.9);
   --optionsBoard-color: rgba(172, 154, 154, 0.95);
-  --editor-color: rgb(150, 126, 118);
+  --editor-color: rgb(150, 126, 118); */
 }
 
 button:hover {

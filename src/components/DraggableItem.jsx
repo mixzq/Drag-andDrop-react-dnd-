@@ -30,7 +30,7 @@ const ItemStyle = styled.div`
     margin-bottom: 10px;
     cursor: grab;
     border-radius: var(--border-radius);
-    background-color: #fffefc;
+    background-color: #c3d0ae;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
