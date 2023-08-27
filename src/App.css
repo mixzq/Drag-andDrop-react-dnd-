@@ -1,0 +1,37 @@
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  /* border: solid 1px blue; */
+}
+body {
+  z-index: -9;
+  background-color: var(--primary-color);
+  background-image: url("/public/1.svg");
+}
+
+:root {
+  --border-radius: 10px;
+
+  --primary-color: rgb(68, 80, 105);
+  --secondary-color: rgb(37, 43, 72);
+  --optionsBoard-color: rgba(91, 154, 139, 0.9);
+  --editor-color: rgb(186, 174, 88);
+
+  /* ------------------ */
+  /* --primary-color: rgb(179, 196, 158);
+  --secondary-color: rgb(140, 164, 119);
+  --optionsBoard-color: rgb(170, 153, 128);
+  --editor-color: rgb(67, 83, 52); */
+
+  /* ------------------ */
+  --primary-color: rgb(155, 171, 184);
+  --secondary-color: rgba(215, 192, 174, 0.9);
+  --optionsBoard-color: rgba(172, 154, 154, 0.95);
+  --editor-color: rgb(150, 126, 118);
+}
+
+button:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
