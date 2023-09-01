@@ -1,6 +1,7 @@
 import React from "react";
 import { useDrag } from "react-dnd";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
 function DraggableItem({ item, color }) {
   const itemStyle = {
@@ -12,11 +13,24 @@ function DraggableItem({ item, color }) {
     item,
   });
 
+  // -----animation-------
+  const variants = {
+    hidden: { opacity: 0, scale: 0.7 },
+    visible: { opacity: 1, scale: 1 },
+  };
+
   return (
     <ItemStyle>
-      <div ref={drag} className="draggable-item" style={itemStyle}>
+      <motion.div
+        ref={drag}
+        className="draggable-item"
+        style={itemStyle}
+        initial="hidden"
+        animate="visible"
+        variants={variants}
+      >
         {item.name}
-      </div>
+      </motion.div>
     </ItemStyle>
   );
 }
@@ -24,19 +38,22 @@ function DraggableItem({ item, color }) {
 export default DraggableItem;
 const ItemStyle = styled.div`
   .draggable-item {
-    color: #333333;
+    color: #ffffff;
     font-size: 1vw;
-    padding: 0.5vh 0.5vw;
-    margin-bottom: 10px;
+    padding: 1.4vh 1.3vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     cursor: grab;
     border-radius: var(--border-radius);
-    background-color: #fffefc;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: #373737;
+    transition: transform 0.2s ease;
   }
 
   .draggable-item:hover {
     transform: scale(1.02);
-    background-color: rgba(255, 255, 255, 0.8);
+
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
   }
 `;

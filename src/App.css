@@ -3,18 +3,20 @@
   padding: 0;
   margin: 0;
   /* border: solid 1px blue; */
+  font-family: Helvetica, Roobert, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
 }
 body {
   z-index: -9;
   background-color: var(--primary-color);
-  background-image: url("/public/1.svg");
+  /* background-image: url("/public/5.svg"); */
 }
 
 :root {
-  --border-radius: 10px;
+  --border-radius: 8px;
 
-  --primary-color: rgb(68, 80, 105);
-  --secondary-color: rgb(37, 43, 72);
+  --primary-color: #2e73ef;
+  --secondary-color: rgb(37, 37, 37);
   --optionsBoard-color: rgba(91, 154, 139, 0.9);
   --editor-color: rgb(186, 174, 88);
 
@@ -25,10 +27,10 @@ body {
   --editor-color: rgb(67, 83, 52); */
 
   /* ------------------ */
-  --primary-color: rgb(155, 171, 184);
+  /* --primary-color: rgb(155, 171, 184);
   --secondary-color: rgba(215, 192, 174, 0.9);
   --optionsBoard-color: rgba(172, 154, 154, 0.95);
-  --editor-color: rgb(150, 126, 118);
+  --editor-color: rgb(150, 126, 118); */
 }
 
 button:hover {

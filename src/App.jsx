@@ -7,8 +7,8 @@ import styled from "styled-components";
 import BoardMaker from "./components/BoardMaker";
 import OptionMaker from "./components/OptionMaker";
 import OptionZone from "./components/OptionZone";
-import QestionMaker from "./components/QestionMaker";
-import DeleteZone from "./components/DeleteZone";
+
+import EditableText from "./components/EditableText";
 
 function App() {
   //------adding board----''name -text
@@ -29,41 +29,7 @@ function App() {
 
   //--------------
   //--------create items-------
-  const [items, setItems] = useState([
-    [
-      //-----catg: -> set option at origianl place ------
-      {
-        id: 1,
-        name: "Manchester United",
-        catg: "Options",
-        group: "European Football Clubs",
-      },
-      {
-        id: 2,
-        name: "Brazil",
-        catg: "Options",
-        group: "World Cup Winning Nations",
-      },
-      {
-        id: 3,
-        name: "FC Barcelona",
-        catg: "Options",
-        group: "European Football Clubs",
-      },
-      {
-        id: 4,
-        name: "France",
-        catg: "Options",
-        group: "World Cup Winning Nations",
-      },
-      {
-        id: 5,
-        name: "Germany",
-        catg: "Options",
-        group: "World Cup Winning Nations",
-      },
-    ],
-  ]);
+  const [items, setItems] = useState([]);
   //------delete option(item)----
   const handleDeletexxx = (id) => {
     setItems(items.filter((item) => item.id !== id));
@@ -112,11 +78,14 @@ function App() {
   const checkAnswer = (anwserNeedToCheck) => {
     const checkedAnwser = anwserNeedToCheck.map((e) => {
       let points = 0;
+
       if (e.catg === e.group) {
         points++;
-        return { ...e, color: "#dbf9b7" };
+        return { ...e, color: "#7d9c57" };
+      } else if (e.catg === "Options") {
+        return { ...e };
       }
-      return { ...e, color: "pink" };
+      return { ...e, color: "#c34c6c" };
     });
     return checkedAnwser;
   };
@@ -131,9 +100,6 @@ function App() {
 
   const updatDate = () => {
     setItems(newItems);
-    console.log(items);
-    const rightAnswere = items.filter((item) => item.color === "lightgreen");
-    setResult(rightAnswere.length);
   };
   //------------------------------------------------------
   //----edeting button---------------
@@ -148,9 +114,19 @@ function App() {
     setShowing(!showing);
   };
 
+  const removeColorAttribute = () => {
+    const newItems = items.map((item) => {
+      const { color, ...rest } = item;
+      return rest;
+    });
+
+    setItems(newItems);
+  };
+
   const editButtondandle = () => {
     ShowToggle();
     butttonTextSwitch();
+    removeColorAttribute();
   };
 
   //-----
@@ -174,8 +150,8 @@ function App() {
     <DndProvider backend={HTML5Backend}>
       <BoardStyle>
         <div className="app-container">
-          {console.log(items)}
-          {console.log(dropzones, boardName)}
+          {console.log(dropzones)}
+
           <div className="quizMaker-zone">
             <button className="edit-button" onClick={editButtondandle}>
               {testButton ? "Test" : "Edit"}
@@ -187,22 +163,7 @@ function App() {
                 background: "var( --editor-color)",
                 borderRadius: "var(--border-radius)",
               }}
-            >
-              <BoardMaker
-                board={boardName}
-                setBoard={setBoardName}
-                addNewBoard={addDropzone}
-              />
-              <div className="question_maker">
-                <QestionMaker question={question} setQuestion={setQuestion} />
-              </div>
-
-              <OptionMaker
-                dropzones={dropzones}
-                items={items}
-                setItems={setItems}
-              />
-            </div>
+            ></div>
           </div>
 
           <div className="quiz">
@@ -219,12 +180,28 @@ function App() {
                   />
                 </div>
               ))}
+              <BoardMaker
+                board={boardName}
+                setBoard={setBoardName}
+                addNewBoard={addDropzone}
+                showing={showing}
+              />
+            </div>
+            <div className="question">
+              <EditableText initialText=" Enter question here" />
             </div>
 
             <div className="options">
-              <div className="question">
-                Question: <span>{question}</span>
+              <div className="optionmaker">
+                <OptionMaker
+                  dropzones={dropzones}
+                  items={items}
+                  setItems={setItems}
+                  handleDeletexxx={handleDeletexxx}
+                  showing={showing}
+                />
               </div>
+
               <div className="option_delete-zone">
                 <div className="option-zone">
                   <OptionZone
@@ -234,16 +211,19 @@ function App() {
                     handleDrop={handleDrop}
                   />
                 </div>
-                <div className="delete-zone">
-                  <DeleteZone
-                    handleDelete={handleDeletexxx}
-                    showing={showing}
-                  />
+                <div className="sumbitzone">
+                  <button
+                    onClick={updatDate}
+                    className="submit-button"
+                    style={{
+                      opacity: showing ? "0" : "1",
+                      pointerEvents: showing ? "none" : "auto",
+                    }}
+                  >
+                    SUBMIT
+                  </button>
                 </div>
               </div>
-              <button onClick={updatDate} className="submit-button">
-                submit
-              </button>
             </div>
           </div>
         </div>
@@ -257,20 +237,21 @@ export default App;
 const BoardStyle = styled.div`
   .app-container {
     display: flex;
-    gap: 20px;
+
     padding: 3vw;
     height: 100vh;
     .quiz {
+      width: 100%;
       display: flex;
       height: 93vh;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: center;
     }
     .board {
       height: 55vh;
       width: 100%;
       display: flex;
-      justify-content: start;
+      justify-content: center;
       flex-wrap: wrap;
       gap: 20px;
     }
@@ -280,13 +261,17 @@ const BoardStyle = styled.div`
   }
 
   .option_delete-zone {
-    height: 80%;
-    background-color: var(--optionsBoard-color);
+    height: 100%;
+    /* border: 1px solid #ffffff; */
     width: 100%;
     display: flex;
+    flex-direction: column;
     border-radius: var(--border-radius);
+    justify-content: center;
+    align-items: center;
 
     .option-zone {
+      height: 80%;
       width: 100%;
     }
   }
@@ -298,10 +283,10 @@ const BoardStyle = styled.div`
     align-items: start;
     flex-direction: column;
     bottom: 5vh;
-    width: 75vw;
+    width: 100%;
     min-width: 30vw;
     min-height: 10vh;
-    height: 30vh;
+    height: 35vh;
 
     border-radius: 20px;
     justify-content: space-between;
@@ -309,15 +294,16 @@ const BoardStyle = styled.div`
       font-size: 1.5rem;
       color: white;
     }
-    .delete-zone {
-      display: flex;
-      justify-content: end;
-    }
+  }
+
+  .optionmaker {
+    width: 100%;
   }
 
   .optionzone {
     padding: 1.5vw;
     display: flex;
+    justify-content: center;
     height: 100%;
 
     flex-wrap: wrap;
@@ -329,16 +315,21 @@ const BoardStyle = styled.div`
     color: #ffffff;
   }
   .question {
+    display: flex;
     border-radius: var(--border-radius);
-    width: auto;
+    width: 100%;
     padding: 1vh;
-    font-size: 1.5rem;
+    font-size: 2vh;
+    font-style: italic;
+    justify-content: center;
+
     height: 25%;
-    color: #ffffff;
+    color: #975858;
     padding-bottom: 1.5vh;
   }
 
   .quizMaker-zone {
+    position: absolute;
     gap: 3vh;
     display: flex;
     flex-direction: column;
@@ -361,20 +352,53 @@ const BoardStyle = styled.div`
     border-radius: var(--border-radius);
     border: none;
   }
-  .submit-button {
-    cursor: pointer;
-    padding: 5px 20px;
-    margin-top: 2vh;
-    width: fit-content;
-    height: 3vh;
-    font-size: 1.5vh;
-    font-weight: 600;
-    border-radius: var(--border-radius);
-    border: none;
-    button {
-      background-color: #faf1e4;
-    }
+
+  .sumbitzone {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    width: 8%;
   }
 
   ///bacground image-------------
+
+  /* CSS */
+  .submit-button {
+    border: none;
+    background-color: #000000;
+    border-radius: 15px;
+    box-sizing: border-box;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-block;
+    font-family: -apple-system;
+
+    font-size: 1.5vh;
+    font-weight: 600;
+    line-height: normal;
+    margin: 0;
+    min-height: 60px;
+    min-width: 0;
+    outline: none;
+    /* 
+    text-align: center;
+    text-decoration: none; */
+    transition: all 300ms cubic-bezier(0.23, 1, 0.32, 1);
+    /* user-select: none; */
+    /* -webkit-user-select: none; */
+    /* touch-action: manipulation; */
+    width: 100%;
+    /* will-change: transform; */
+  }
+
+  .submit-button:hover {
+    box-shadow: rgba(0, 0, 0, 0.25) 0 8px 15px;
+    transform: translateY(-2px);
+  }
+
+  .submit-button:active {
+    box-shadow: none;
+    transform: translateY(0);
+  }
 `;

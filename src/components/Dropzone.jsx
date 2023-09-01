@@ -1,8 +1,9 @@
 import React from "react";
-import { useEffect } from "react";
+
 import { useDrop } from "react-dnd";
 import DraggableItem from "./DraggableItem";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
 function Dropzone({
   catg,
@@ -19,14 +20,28 @@ function Dropzone({
   });
 
   const styled = {
-    backgroundColor: isOver ? "#efe5d7" : "#fffff8",
+    backgroundColor: isOver ? "rgb(220, 220, 220)" : "rgb(255, 255, 255)",
   };
 
   const filteredItems = items.filter((item) => item.catg === catg);
 
+  //----animation---------
+  const variants = {
+    hidden: { opacity: 0, scale: 0.5 },
+    visible: { opacity: 1, scale: 1 },
+  };
+
   return (
     <DropzoneStyle>
-      <div ref={drop} className="dropzone" style={styled}>
+      <motion.div
+        ref={drop}
+        className="dropzone"
+        style={styled}
+        initial="hidden" // 初始状态
+        animate="visible"
+        exit="hidden"
+        variants={variants}
+      >
         <div className="title-part">
           <a
             onClick={() => removeDropzone(boardName)}
@@ -42,7 +57,7 @@ function Dropzone({
             <DraggableItem key={item.id} item={item} color={item.color} />
           ))}
         </div>
-      </div>
+      </motion.div>
     </DropzoneStyle>
   );
 }
@@ -64,18 +79,22 @@ const DropzoneStyle = styled.div`
   }
 
   .title {
+    display: flex;
+    justify-content: center;
     color: #ffffff;
-    font-size: 1.5vh;
+    font-size: 1.8vh;
 
     height: auto;
-    width: 90%;
+    width: 100%;
     display: flex;
     align-items: center;
     flex-wrap: wrap;
   }
 
   .title-part {
-    padding: 0.5vw;
+    text-align: center;
+    padding: 1vh 1.8vw;
+
     display: flex;
     border-radius: 20px 20px 0px 0px;
     -webkit-border-radius: 20px 20px 0px 0px;
@@ -85,10 +104,10 @@ const DropzoneStyle = styled.div`
   }
   .dropitem {
     display: flex;
-    padding: 1rem;
+    padding: 1.5vw 1.5vw;
 
     flex-direction: column;
-    gap: 0.5vw;
+    gap: 1vw;
   }
   a {
     padding-right: 10px;

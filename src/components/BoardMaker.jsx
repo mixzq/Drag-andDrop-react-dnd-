@@ -1,36 +1,58 @@
 import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
+import { motion } from "framer-motion";
 
-function BoardMaker({ board, setBoard, addNewBoard }) {
+function BoardMaker({ board, setBoard, addNewBoard, showing }) {
   //------adding board
   const [inputValue, setInputValue] = useState("");
 
-  // const [array, setArray] = useState([]);
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
   };
+  //--------------error----------------------
+  const [showError, setShowError] = useState(false);
+
+  const hideError = () => {
+    setShowError(false);
+    document.removeEventListener("mousedown", hideError);
+  };
   const handleButtonClick = () => {
+    if (inputValue === "") {
+      setShowError(true);
+      document.addEventListener("mousedown", hideError);
+      return; //-----error part
+    }
     setBoard([...board, inputValue]);
     setInputValue("");
     addNewBoard(inputValue);
   };
 
+  //----animation----------
+  const variants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1 },
+  };
+
   return (
-    <Boardmaker>
+    <Boardmaker
+      initial="hidden"
+      animate={showing ? "visible" : "hidden"}
+      variants={variants}
+    >
       <div className="boardmaker">
         <div className="Makerboard">
-          1.Board Name:
           <input
+            className={showError ? "inputError" : "inputNormal"}
             type="text"
-            placeholder="   Input question here"
+            placeholder="Enter Board Name"
             value={inputValue}
             onChange={handleInputChange}
           />
-          <div className="bottons">
-            <button className="pluss" onClick={handleButtonClick}>
-              +
-            </button>
+          <div className="buttons">
+            <a className="pluss" onClick={handleButtonClick}>
+              <img src="plus.svg" alt="" />
+            </a>
           </div>
         </div>
       </div>
@@ -39,21 +61,29 @@ function BoardMaker({ board, setBoard, addNewBoard }) {
 }
 
 export default BoardMaker;
-const Boardmaker = styled.div`
+const Boardmaker = styled(motion.div)`
   .boardmaker {
-    width: 15vw;
+    width: auto;
+    height: auto;
+    border-radius: 20px;
+    display: flex;
+    background-color: #303030;
   }
 
-  .bottons {
+  .buttons {
     display: flex;
-    gap: 1vw;
-    button {
+
+    a {
       cursor: pointer;
-      font-size: 1.5vw;
+      font-size: 1.2vw;
       border: none;
       border-radius: 5px;
 
       width: 20%;
+    }
+    a:hover {
+      transform: translateY(-2px);
+      transition: transform 0.1s ease-out;
     }
   }
   .Makerboard {
@@ -62,14 +92,21 @@ const Boardmaker = styled.div`
 
     /* border-bottom: 4px dashed #ffffff; */
     display: flex;
-    flex-direction: column;
+
     gap: 1vh;
-    padding: 15px 15px 30px 15px;
-    input {
+    padding: 1.8vh;
+    .inputNormal {
       padding: 5px;
-      border: none;
       border-radius: 5px;
       height: 3vh;
+      transition: border 0.1s ease-in-out;
+    }
+    .inputError {
+      padding: 5px;
+      border: 2px solid #eb3a3a;
+      border-radius: 5px;
+      height: 3vh;
+      transition: border 0.1s ease-in-out;
     }
   }
 `;

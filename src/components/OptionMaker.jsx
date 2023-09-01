@@ -2,8 +2,10 @@ import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
 import { v4 as uuidv4 } from "uuid";
+import DeleteZone from "./DeleteZone";
+import { motion } from "framer-motion";
 
-function OptionMaker({ dropzones, items, setItems }) {
+function OptionMaker({ dropzones, items, setItems, handleDeletexxx, showing }) {
   //----dropzones data change---
   const changedDropzones = dropzones.map((item) => item.name);
 
@@ -25,14 +27,24 @@ function OptionMaker({ dropzones, items, setItems }) {
 
   ///------alert  part--------------
 
-  const [showError, setShowError] = useState(false);
+  const [inpuError1, setInputError1] = useState(false);
+  const [dropDownError2, setDropDownError2] = useState(false);
 
   const hideError = () => {
-    setShowError(false);
+    setInputError1(false);
+    setDropDownError2(false);
     document.removeEventListener("mousedown", hideError);
   };
 
   //---------------
+  //--------random order----
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+    return array;
+  };
 
   //-----------itesm creating---------------------
 
@@ -46,8 +58,20 @@ function OptionMaker({ dropzones, items, setItems }) {
   };
 
   const handleButtonClick = () => {
-    if (!optionBoardInput || !optionNameInput) {
-      setShowError(true);
+    let hasError = false;
+
+    if (!optionBoardInput) {
+      setDropDownError2(true);
+
+      hasError = true;
+    }
+
+    if (!optionNameInput) {
+      setInputError1(true);
+      hasError = true;
+    }
+
+    if (hasError) {
       document.addEventListener("mousedown", hideError);
       return;
     }
@@ -55,33 +79,49 @@ function OptionMaker({ dropzones, items, setItems }) {
     //------id uuid----
     var uuid = uuidv4();
     const newItem = itemsssCreater(optionNameInput, optionBoardInput, uuid);
-    setItems([...items, newItem]);
+    const newItems = [...items, newItem];
+    setItems(shuffleArray(newItems));
     setOptionNameInput("");
     setoptionBoardInput("");
   };
 
+  // const styled = {
+  //   display: showing ? "flex" : "none",
+  // };
+  ///animation-----
+  const variants = {
+    hidden: { opacity: 0, scale: 0.9 },
+    visible: { opacity: 1, scale: 1 },
+  };
+
   return (
-    <OptionCreatorStyle>
+    <OptionCreatorStyle
+      initial="hidden"
+      animate={showing ? "visible" : "hidden"}
+      variants={variants}
+    >
+      {console.log(inpuError1, dropDownError2)}
       <div className="optionmaker">
         <div className="optionBoard">
-          <p>3.Option:</p>
-          {console.log(optionNameInput, optionBoardInput)}
+          <p>OPTION:</p>
 
           <input
+            className={inpuError1 ? "inputError" : "inputRight"}
             type="text"
-            placeholder=" option text"
+            placeholder=" Enter option"
             onChange={handleNameInputChange}
             value={optionNameInput}
           />
-          <p>4.Option should be:</p>
+          <p>BOARD NAME:</p>
           <select
-            class="dropdown"
+            className={dropDownError2 ? "dropdownError" : "dropdownRight"}
             onChange={boardInputChange}
             value={optionBoardInput}
           >
             <option value="" disabled selected hidden>
               (Choose the board)
             </option>
+            {console.log(changedDropzones)}
             {changedDropzones.map((name, index) => (
               <option key={index} value={name}>
                 {name}
@@ -89,13 +129,13 @@ function OptionMaker({ dropzones, items, setItems }) {
             ))}
           </select>
 
-          <div className="bottons">
-            <button className="pluss" onClick={handleButtonClick}>
-              +
-            </button>
-            {showError && (
-              <span className="error">please fill up all the files </span>
-            )}
+          <div className="buttons">
+            <a className="pluss" onClick={handleButtonClick}>
+              <img src="plus.svg" alt="" />
+            </a>
+          </div>
+          <div className="delete-zone ">
+            <DeleteZone handleDelete={handleDeletexxx} showing={showing} />
           </div>
         </div>
       </div>
@@ -104,54 +144,96 @@ function OptionMaker({ dropzones, items, setItems }) {
 }
 
 export default OptionMaker;
-const OptionCreatorStyle = styled.div`
+const OptionCreatorStyle = styled(motion.div)`
   .optionmaker {
-    /* position: absolute;
-    bottom: 12vh;
-    width: 15vw; */
+    display: flex;
+    justify-content: center;
+    width: 100%;
   }
 
   .error {
-    font-size: 1vh;
+    display: flex;
+    align-items: center;
+
+    width: 15;
+    font-size: 1.2vh;
     font-style: italic;
-    color: #ff6f6f;
+    color: #ff0000;
   }
 
-  .bottons {
+  .buttons {
     display: flex;
-    gap: 1vw;
-    .pluss {
-      cursor: pointer;
-      font-size: 1.5vw;
-      border: none;
-      border-radius: 5px;
 
-      width: 20%;
+    .pluss {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      background-color: transparent;
+    }
+    .pluss:hover {
+      transform: translateY(-2px);
+      transition: transform 0.1s ease-out;
     }
   }
 
   .optionBoard {
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    width: fit-content;
     color: #ffffff;
-    font-size: 1vw;
-
-    /* border-bottom: 4px dashed #ffffff;
-    border-top: 4px dashed #ffffff; */
+    font-size: 1.2vh;
     display: flex;
-    flex-direction: column;
     gap: 1vh;
-    padding: 30px 15px 30px 15px;
-    input {
-      padding: 5px;
+    padding: 10px 20px 10px 20px;
+    background-color: #303030;
+    /////-----error part---------
+    .inputRight {
+      width: 15vw;
+      padding: 8px;
       border: none;
       border-radius: 5px;
       height: 3vh;
+      transition: border 0.1s ease-in-out;
+    }
+    .inputError {
+      width: 15vw;
+      padding: 8px;
+      border: none;
+      border-radius: 5px;
+      height: 3vh;
+      border: 2px solid #ff0000;
+      transition: border 0.1s ease-in-out;
     }
   }
-  .dropdown {
+  .dropdownError {
+    font-size: 1.2vh;
     height: 3vh;
     border-radius: 5px;
+    border: 2px solid #ff0000;
+    transition: border 0.1s ease-in-out;
     option {
       font-weight: 800;
     }
+  }
+  .dropdownRight {
+    font-size: 1.2vh;
+    height: 3vh;
+    border-radius: 5px;
+    transition: border 0.1s ease-in-out;
+    option {
+      font-weight: 800;
+    }
+  }
+  p {
+    display: flex;
+    align-items: center;
+  }
+
+  .delete-zone {
+    align-items: center;
+    display: flex;
+    justify-content: center;
   }
 `;

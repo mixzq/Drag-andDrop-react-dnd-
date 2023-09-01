@@ -11,14 +11,13 @@ function DeleteZone({ handleDelete, showing }) {
 
   const styled = {
     backgroundColor: isOver ? "rgba(218, 116, 116, 0.8)" : "rgba(0, 0, 0, 0.0)",
-    display: showing ? "block" : "none",
   };
 
   return (
     <DeleteZoneStyle>
       <div ref={drop} className="DeleteZone" style={styled}>
-        <h3>Drop here</h3>
-        <h3>to delete</h3> <h3> options</h3>
+        <img src="trash-white.svg" alt="" />
+        <p>Drop here to delete options</p>
       </div>
     </DeleteZoneStyle>
   );
@@ -28,19 +27,25 @@ export default DeleteZone;
 
 const DeleteZoneStyle = styled.div`
   .DeleteZone {
-    border-radius: 0px 10px 21px 0px;
-    -webkit-border-radius: 0px 10px 21px 0px;
-    -moz-border-radius: 0px 10px 21px 0px;
-    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 3vh;
+    border-radius: 0px;
+    padding: 5px;
     text-align: center;
-    border: 2px dashed #ffffff;
-    height: 100%;
+    border: 0.2vh dashed #ffffff;
+    border-radius: 8px;
 
     transition: background-color 0.3s ease;
 
-    h3 {
+    p {
       font-size: 1.2vh;
       color: #ffffff;
     }
+  }
+  img {
+    height: 100%;
+    width: auto;
   }
 `;
