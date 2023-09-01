@@ -378,7 +378,7 @@ const BoardStyle = styled.div`
     font-weight: 600;
     line-height: normal;
     margin: 0;
-    min-height: 60px;
+    min-height: 4vh;
     min-width: 0;
     outline: none;
     /* 

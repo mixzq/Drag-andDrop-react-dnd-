@@ -92,6 +92,7 @@ const Boardmaker = styled(motion.div)`
 
     /* border-bottom: 4px dashed #ffffff; */
     display: flex;
+    align-items: center;
 
     gap: 1vh;
     padding: 1.8vh;
@@ -108,5 +109,10 @@ const Boardmaker = styled(motion.div)`
       height: 3vh;
       transition: border 0.1s ease-in-out;
     }
+  }
+  img {
+    height: auto;
+
+    display: block;
   }
 `;
