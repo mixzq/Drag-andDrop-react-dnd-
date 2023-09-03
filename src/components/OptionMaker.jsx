@@ -36,9 +36,8 @@ function OptionMaker({ dropzones, items, setItems }) {
 
   //-----------itesm creating---------------------
 
-  const itemsssCreater = (name, group, id) => {
+  const itemsssCreater = (name, group) => {
     return {
-      id: id,
       name: name,
       catg: "Options", //options start place
       group: group,
@@ -53,8 +52,8 @@ function OptionMaker({ dropzones, items, setItems }) {
     }
 
     //------id uuid----
-    var uuid = uuidv4();
-    const newItem = itemsssCreater(optionNameInput, optionBoardInput, uuid);
+
+    const newItem = itemsssCreater(optionNameInput, optionBoardInput);
     setItems([...items, newItem]);
     setOptionNameInput("");
     setoptionBoardInput("");
@@ -64,7 +63,7 @@ function OptionMaker({ dropzones, items, setItems }) {
     <OptionCreatorStyle>
       <div className="optionmaker">
         <div className="optionBoard">
-          <p>3.Option:</p>
+          <p>Option:</p>
           {console.log(optionNameInput, optionBoardInput)}
 
           <input
@@ -73,9 +72,9 @@ function OptionMaker({ dropzones, items, setItems }) {
             onChange={handleNameInputChange}
             value={optionNameInput}
           />
-          <p>4.Option should be:</p>
+          <p>Option should be:</p>
           <select
-            class="dropdown"
+            className="dropdown"
             onChange={boardInputChange}
             value={optionBoardInput}
           >
@@ -94,7 +93,9 @@ function OptionMaker({ dropzones, items, setItems }) {
               +
             </button>
             {showError && (
-              <span className="error">please fill up all the files </span>
+              <span className="error">
+                Please make sure you have filled in all the files !!{" "}
+              </span>
             )}
           </div>
         </div>
@@ -106,50 +107,52 @@ function OptionMaker({ dropzones, items, setItems }) {
 export default OptionMaker;
 const OptionCreatorStyle = styled.div`
   .optionmaker {
-    /* position: absolute;
-    bottom: 12vh;
-    width: 15vw; */
   }
 
   .error {
+    display: flex;
+    align-items: center;
+    width: 20vw;
     font-size: 1vh;
     font-style: italic;
-    color: #ff6f6f;
+    color: #ffffff;
   }
 
   .bottons {
     display: flex;
     gap: 1vw;
     .pluss {
+      width: 5vw;
       cursor: pointer;
       font-size: 1.5vw;
       border: none;
-      border-radius: 5px;
-
-      width: 20%;
     }
   }
 
   .optionBoard {
+    width: 100%;
     color: #ffffff;
     font-size: 1vw;
 
-    /* border-bottom: 4px dashed #ffffff;
-    border-top: 4px dashed #ffffff; */
     display: flex;
-    flex-direction: column;
     gap: 1vh;
-    padding: 30px 15px 30px 15px;
+    padding: 10px 15px 10px 15px;
     input {
-      padding: 5px;
+      width: 20vw;
+      padding: 2px;
       border: none;
-      border-radius: 5px;
-      height: 3vh;
+
+      height: 2vh;
     }
   }
+
+  p {
+    display: block;
+  }
+
   .dropdown {
-    height: 3vh;
-    border-radius: 5px;
+    height: 2vh;
+
     option {
       font-weight: 800;
     }

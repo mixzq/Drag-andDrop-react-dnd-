@@ -2,37 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import { useState } from "react";
 
-function BoardMaker({ board, setBoard, addNewBoard }) {
-  //------adding board
-  const [inputValue, setInputValue] = useState("");
-
-  // const [array, setArray] = useState([]);
-  const handleInputChange = (e) => {
-    setInputValue(e.target.value);
-  };
+function BoardMaker({ addDropzone }) {
   const handleButtonClick = () => {
-    setBoard([...board, inputValue]);
-    setInputValue("");
-    addNewBoard(inputValue);
+    addDropzone();
   };
 
   return (
     <Boardmaker>
-      <div className="boardmaker">
-        <div className="Makerboard">
-          1.Board Name:
-          <input
-            type="text"
-            placeholder="   Input question here"
-            value={inputValue}
-            onChange={handleInputChange}
-          />
-          <div className="bottons">
-            <button className="pluss" onClick={handleButtonClick}>
-              +
-            </button>
-          </div>
-        </div>
+      <div className="bottons">
+        <button className="pluss" onClick={handleButtonClick}>
+          +
+        </button>
       </div>
     </Boardmaker>
   );
@@ -40,36 +20,20 @@ function BoardMaker({ board, setBoard, addNewBoard }) {
 
 export default BoardMaker;
 const Boardmaker = styled.div`
-  .boardmaker {
-    width: 15vw;
-  }
-
   .bottons {
+    width: 2vw;
+    height: 4vh;
     display: flex;
     gap: 1vw;
     button {
+      clip-path: circle(50% at 50% 50%);
+      padding: px;
       cursor: pointer;
-      font-size: 1.5vw;
+      font-size: 2vw;
       border: none;
-      border-radius: 5px;
+      border-radius: 2px;
 
-      width: 20%;
-    }
-  }
-  .Makerboard {
-    color: #ffffff;
-    font-size: 1vw;
-
-    /* border-bottom: 4px dashed #ffffff; */
-    display: flex;
-    flex-direction: column;
-    gap: 1vh;
-    padding: 15px 15px 30px 15px;
-    input {
-      padding: 5px;
-      border: none;
-      border-radius: 5px;
-      height: 3vh;
+      width: 100%;
     }
   }
 `;

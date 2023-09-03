@@ -9,6 +9,8 @@ import OptionMaker from "./components/OptionMaker";
 import OptionZone from "./components/OptionZone";
 import QestionMaker from "./components/QestionMaker";
 import DeleteZone from "./components/DeleteZone";
+import { v4 as uuidv4 } from "uuid";
+import EditableText from "./components/EditableText";
 
 function App() {
   //------adding board----''name -text
@@ -19,51 +21,30 @@ function App() {
 
   const addDropzone = (name) => {
     //adding ---
-    const newDropzone = { name };
+    const newDropzone = { id: uuidv4(), name };
     setDropzones([...dropzones, newDropzone]);
   };
 
-  const removeDropzone = (name) => {
-    setDropzones(dropzones.filter((dropzone) => dropzone.name !== name));
+  const updateDropzoneById = (id, newValue) => {
+    const updatedDropzones = dropzones.map((dropzone) => {
+      if (dropzone.id === id) {
+        return { ...dropzone, name: newValue };
+      }
+      return dropzone;
+    });
+    setDropzones(updatedDropzones);
+  };
+
+  const removeDropzone = (id) => {
+    setDropzones(dropzones.filter((dropzone) => dropzone.id !== id));
+    const newDropzones = [...dropzones];
+    newDropzones.splice(index, 1);
+    setDropzones(newDropzones);
   }; ////------delete dropzone----
 
   //--------------
   //--------create items-------
-  const [items, setItems] = useState([
-    [
-      //-----catg: -> set option at origianl place ------
-      {
-        id: 1,
-        name: "Manchester United",
-        catg: "Options",
-        group: "European Football Clubs",
-      },
-      {
-        id: 2,
-        name: "Brazil",
-        catg: "Options",
-        group: "World Cup Winning Nations",
-      },
-      {
-        id: 3,
-        name: "FC Barcelona",
-        catg: "Options",
-        group: "European Football Clubs",
-      },
-      {
-        id: 4,
-        name: "France",
-        catg: "Options",
-        group: "World Cup Winning Nations",
-      },
-      {
-        id: 5,
-        name: "Germany",
-        catg: "Options",
-        group: "World Cup Winning Nations",
-      },
-    ],
-  ]);
+  const [items, setItems] = useState([]);
   //------delete option(item)----
   const handleDeletexxx = (id) => {
     setItems(items.filter((item) => item.id !== id));
@@ -112,9 +93,12 @@ function App() {
   const checkAnswer = (anwserNeedToCheck) => {
     const checkedAnwser = anwserNeedToCheck.map((e) => {
       let points = 0;
+
       if (e.catg === e.group) {
         points++;
         return { ...e, color: "#dbf9b7" };
+      } else if (e.catg === "Options") {
+        return { ...e };
       }
       return { ...e, color: "pink" };
     });
@@ -148,9 +132,19 @@ function App() {
     setShowing(!showing);
   };
 
+  const removeColorAttribute = () => {
+    const newItems = items.map((item) => {
+      const { color, ...rest } = item;
+      return rest;
+    });
+
+    setItems(newItems);
+  };
+
   const editButtondandle = () => {
     ShowToggle();
     butttonTextSwitch();
+    removeColorAttribute();
   };
 
   //-----
@@ -174,12 +168,43 @@ function App() {
     <DndProvider backend={HTML5Backend}>
       <BoardStyle>
         <div className="app-container">
-          {console.log(items)}
-          {console.log(dropzones, boardName)}
           <div className="quizMaker-zone">
             <button className="edit-button" onClick={editButtondandle}>
               {testButton ? "Test" : "Edit"}
             </button>
+          </div>
+
+          <div className="quiz">
+            {console.log(dropzones)}
+            <div className="board">
+              {dropzones.map((dropzone) => (
+                <div className="boardUnit" key={dropzone.id}>
+                  <Dropzone
+                    catg={dropzone.name}
+                    items={items}
+                    handleDrop={handleDrop}
+                    boardName={dropzone.name}
+                    removeDropzone={removeDropzone}
+                    showing={showing}
+                    board={boardName}
+                    setBoard={setBoardName}
+                    addDropzone={addDropzone}
+                    key={dropzone.id}
+                    id={dropzone.id}
+                    updateDropzoneById={updateDropzoneById}
+                  />
+                </div>
+              ))}
+              <BoardMaker
+                board={boardName}
+                setBoard={setBoardName}
+                addDropzone={addDropzone}
+              />
+            </div>
+
+            <div className="question">
+              <EditableText initialText="Enter question here" />
+            </div>
             <div
               className="quizMaker"
               style={{
@@ -188,43 +213,14 @@ function App() {
                 borderRadius: "var(--border-radius)",
               }}
             >
-              <BoardMaker
-                board={boardName}
-                setBoard={setBoardName}
-                addNewBoard={addDropzone}
-              />
-              <div className="question_maker">
-                <QestionMaker question={question} setQuestion={setQuestion} />
-              </div>
-
               <OptionMaker
                 dropzones={dropzones}
                 items={items}
                 setItems={setItems}
               />
             </div>
-          </div>
-
-          <div className="quiz">
-            <div className="board">
-              {dropzones.map((dropzone, index) => (
-                <div className="boardUnit" key={index}>
-                  <Dropzone
-                    catg={dropzone.name}
-                    items={items}
-                    handleDrop={handleDrop}
-                    boardName={dropzone.name}
-                    removeDropzone={removeDropzone}
-                    showing={showing}
-                  />
-                </div>
-              ))}
-            </div>
 
             <div className="options">
-              <div className="question">
-                Question: <span>{question}</span>
-              </div>
               <div className="option_delete-zone">
                 <div className="option-zone">
                   <OptionZone
@@ -241,7 +237,14 @@ function App() {
                   />
                 </div>
               </div>
-              <button onClick={updatDate} className="submit-button">
+              <button
+                onClick={updatDate}
+                className="submit-button"
+                style={{
+                  opacity: showing ? "0" : "1",
+                  pointerEvents: showing ? "none" : "auto",
+                }}
+              >
                 submit
               </button>
             </div>
@@ -270,7 +273,7 @@ const BoardStyle = styled.div`
       height: 55vh;
       width: 100%;
       display: flex;
-      justify-content: start;
+      justify-content: center;
       flex-wrap: wrap;
       gap: 20px;
     }
@@ -281,10 +284,11 @@ const BoardStyle = styled.div`
 
   .option_delete-zone {
     height: 80%;
-    background-color: var(--optionsBoard-color);
+    /* border: 1px solid #ffffff; */
+
     width: 100%;
     display: flex;
-    border-radius: var(--border-radius);
+    flex-direction: column;
 
     .option-zone {
       width: 100%;
@@ -293,7 +297,7 @@ const BoardStyle = styled.div`
 
   .options {
     display: flex;
-    padding: 1vh;
+
     /* position: absolute; */
     align-items: start;
     flex-direction: column;
@@ -301,7 +305,7 @@ const BoardStyle = styled.div`
     width: 75vw;
     min-width: 30vw;
     min-height: 10vh;
-    height: 30vh;
+    height: 35vh;
 
     border-radius: 20px;
     justify-content: space-between;
@@ -316,6 +320,8 @@ const BoardStyle = styled.div`
   }
 
   .optionzone {
+    display: flex;
+    justify-content: center;
     padding: 1.5vw;
     display: flex;
     height: 100%;
@@ -329,13 +335,17 @@ const BoardStyle = styled.div`
     color: #ffffff;
   }
   .question {
+    height: 15vh;
+    width: 100%;
+    background-color: var(--questionBoard-color);
     border-radius: var(--border-radius);
-    width: auto;
-    padding: 1vh;
-    font-size: 1.5rem;
-    height: 25%;
+    display: flex;
+    border-radius: var(--border-radius);
+
     color: #ffffff;
     padding-bottom: 1.5vh;
+    width: 100%;
+    justify-content: center;
   }
 
   .quizMaker-zone {
@@ -343,12 +353,7 @@ const BoardStyle = styled.div`
     display: flex;
     flex-direction: column;
   }
-  .quizmaker {
-    transition: ease-in-out 0.5s;
-    height: 50vh;
-    background-color: #467d7d;
-    /* background-color: var(--secondary-color); */
-  }
+
   .edit-button {
     text-align: center;
     padding: 5px 20px;

@@ -24,13 +24,13 @@ function DraggableItem({ item, color }) {
 export default DraggableItem;
 const ItemStyle = styled.div`
   .draggable-item {
-    color: #333333;
+    color: #000000;
     font-size: 1vw;
     padding: 0.5vh 0.5vw;
     margin-bottom: 10px;
     cursor: grab;
     border-radius: var(--border-radius);
-    background-color: #fffefc;
+    background-color: #ffffff;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
   }
 
