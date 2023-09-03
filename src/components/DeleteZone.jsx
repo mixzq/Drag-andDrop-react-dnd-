@@ -11,6 +11,8 @@ function DeleteZone({ handleDelete, showing }) {
 
   const styled = {
     backgroundColor: isOver ? "rgba(218, 116, 116, 0.8)" : "rgba(0, 0, 0, 0.0)",
+    transform: isOver ? "scale(1.1)" : "scale(1)",
+    transition: "transform 0.2s ease",
   };
 
   return (

@@ -96,7 +96,6 @@ function App() {
   }, [items]);
   //---------------------------------------------
   //------------result---------------
-  const [result, setResult] = useState();
 
   const updatDate = () => {
     setItems(newItems);
@@ -114,19 +113,23 @@ function App() {
     setShowing(!showing);
   };
 
-  const removeColorAttribute = () => {
-    const newItems = items.map((item) => {
-      const { color, ...rest } = item;
-      return rest;
-    });
-
-    setItems(newItems);
+  //----reset options--- take away color and put back to option zone---
+  const resetItemsAttributes = () => {
+    if (!testButton) {
+      const resetOptions = items.map((item) => {
+        const { color, ...rest } = item; // Removing color attribute
+        return { ...rest, catg: "Options" }; // Resetting catg to "Options"
+      });
+      setItems(resetOptions);
+    }
   };
 
+  console.log("!!!!!!!!!!" + items);
   const editButtondandle = () => {
     ShowToggle();
     butttonTextSwitch();
-    removeColorAttribute();
+
+    resetItemsAttributes();
   };
 
   //-----
@@ -150,8 +153,6 @@ function App() {
     <DndProvider backend={HTML5Backend}>
       <BoardStyle>
         <div className="app-container">
-          {console.log(dropzones)}
-
           <div className="quizMaker-zone">
             <button className="edit-button" onClick={editButtondandle}>
               {testButton ? "Test" : "Edit"}

@@ -39,6 +39,7 @@ function BoardMaker({ board, setBoard, addNewBoard, showing }) {
       initial="hidden"
       animate={showing ? "visible" : "hidden"}
       variants={variants}
+      showing={showing}
     >
       <div className="boardmaker">
         <div className="Makerboard">
@@ -66,7 +67,7 @@ const Boardmaker = styled(motion.div)`
     width: auto;
     height: auto;
     border-radius: 20px;
-    display: flex;
+    display: ${(props) => (props.showing ? "flex" : "none")};
     background-color: #303030;
   }
 
