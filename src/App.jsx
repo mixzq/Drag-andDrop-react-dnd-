@@ -367,7 +367,7 @@ const BoardStyle = styled.div`
   /* CSS */
   .submit-button {
     border: none;
-    background-color: #000000;
+    background-color: var(--secondary-color);
     border-radius: 15px;
     box-sizing: border-box;
     color: #ffffff;

@@ -187,7 +187,7 @@ const OptionCreatorStyle = styled(motion.div)`
     display: flex;
     gap: 1vh;
     padding: 10px 20px 10px 20px;
-    background-color: #303030;
+    background-color: var(--secondary-color);
     /////-----error part---------
     .inputRight {
       width: 15vw;

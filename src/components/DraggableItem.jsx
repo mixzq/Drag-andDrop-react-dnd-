@@ -47,7 +47,7 @@ const ItemStyle = styled.div`
 
     cursor: grab;
     border-radius: var(--border-radius);
-    background-color: #373737;
+    background-color: var(--secondary-color);
     transition: transform 0.2s ease;
   }
 

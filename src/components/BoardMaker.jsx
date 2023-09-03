@@ -68,7 +68,7 @@ const Boardmaker = styled(motion.div)`
     height: auto;
     border-radius: 20px;
     display: ${(props) => (props.showing ? "flex" : "none")};
-    background-color: #303030;
+    background-color: var(--secondary-color);
   }
 
   .buttons {
