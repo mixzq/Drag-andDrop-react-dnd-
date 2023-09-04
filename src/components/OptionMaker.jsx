@@ -108,7 +108,7 @@ function OptionMaker({ dropzones, items, setItems, handleDeletexxx, showing }) {
           <input
             className={inpuError1 ? "inputError" : "inputRight"}
             type="text"
-            placeholder=" Enter option"
+            placeholder=" Enter Option"
             onChange={handleNameInputChange}
             value={optionNameInput}
           />
@@ -119,7 +119,7 @@ function OptionMaker({ dropzones, items, setItems, handleDeletexxx, showing }) {
             value={optionBoardInput}
           >
             <option value="" disabled selected hidden>
-              (Choose the board)
+              (Choose The Board)
             </option>
             {console.log(changedDropzones)}
             {changedDropzones.map((name, index) => (

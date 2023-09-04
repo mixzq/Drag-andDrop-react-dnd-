@@ -189,7 +189,7 @@ function App() {
               />
             </div>
             <div className="question">
-              <EditableText initialText=" Enter question here" />
+              <EditableText initialText=" Enter question" />
             </div>
 
             <div className="options">
