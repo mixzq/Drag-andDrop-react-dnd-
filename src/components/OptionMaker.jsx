@@ -68,7 +68,7 @@ function OptionMaker({ dropzones, items, setItems }) {
 
           <input
             type="text"
-            placeholder=" option text"
+            placeholder="Enter Option"
             onChange={handleNameInputChange}
             value={optionNameInput}
           />
